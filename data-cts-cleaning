@@ -1,0 +1,21 @@
+import openpyxl
+
+# Abrir el archivo de Excel llamado 'Cuentas CTS.xlsx' ubicado en la misma carpeta del proyecto
+workbook = openpyxl.load_workbook('Cuentas CTS.xlsx')
+
+# Seleccionar la hoja que deseas modificar o la hoja activa
+# sheet = workbook['CTS']
+sheet = workbook.active
+
+# Iterar sobre las celdas dy eliminar los guiones en celdas con formato tipo texto en columnas C y D desde la fila 2
+for row in sheet.iter_rows(min_row=2, min_col=10, max_col=11):
+    for cell in row:
+        # las comillas simples(') tienen un significado especial en Python
+        # y necesitan ser escapadas utilizando la barra invertida (\)
+        # if cell.data_type == 's' and '-' in cell.value:
+        # significa que si el tipo de dato es 'string' y estan los guiones y comillas en el valor de la celda se reemplaza
+        if cell.data_type == 's' and ('-' in cell.value or "'" in cell.value):
+            # cell.value = cell.value.replace('-', '')
+            cell.value = str(cell.value).replace('-', '').replace("'", '')
+# Guardar los cambios en el archivo
+workbook.save('archivo_modificado.xlsx')
